@@ -12,6 +12,7 @@ services:
     build: .
     volumes:
       - .:/app
+      - gems_volume:/gems:cached
     ports:
       - "3005:3005"
     stdin_open: true
@@ -20,6 +21,8 @@ services:
       - db
       - redis
     environment:
+      - ACCOUNT_KEYS_URL=https://w7nbdj3b3nsy3uycjqd7bmuplq0yejgw.lambda-url.us-east-2.on.aws
+      - BUNDLE_PATH=/gems
       - REDIS_URL_SIDEKIQ=redis://redis:6379/1
 
   redis:
@@ -46,3 +49,4 @@ services:
 volumes:
   redis:
   postgres:
+  gems_volume:

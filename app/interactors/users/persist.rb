@@ -6,7 +6,7 @@ module Users
       if user.save
         context.user = user
       else
-        context.fail!(error: user.errors.full_messages.to_sentence, status: :unprocessable_entity)
+        context.fail!(errors: user.errors.full_messages, status: :unprocessable_entity)
       end
     end
   end

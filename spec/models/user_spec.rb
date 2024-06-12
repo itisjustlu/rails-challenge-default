@@ -5,7 +5,7 @@ RSpec.describe User, type: :model do
     subject { build(:user) }
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_length_of(:email).is_at_most(200) }
-    it { is_expected.to validate_uniqueness_of(:email) }
+    it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
 
     it { is_expected.to validate_presence_of(:phone_number) }
     it { is_expected.to validate_length_of(:phone_number).is_at_most(20) }

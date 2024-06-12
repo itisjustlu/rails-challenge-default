@@ -12,6 +12,8 @@ gem 'bootsnap', '1.18.3', require: false
 gem 'interactor'
 gem 'sidekiq'
 gem 'rspec-rails', '~> 6.0'
+gem 'active_model_serializers', '~> 0.10.0'
+gem 'faraday'
 
 group :development, :test do
   gem 'factory_bot_rails'
