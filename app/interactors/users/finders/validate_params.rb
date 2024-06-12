@@ -12,7 +12,7 @@ module Users
       private
 
       def valid?
-        context.params.keys - VALID_KEYS == []
+        context.params.keys.map(&:to_sym) - VALID_KEYS == []
       end
     end
   end

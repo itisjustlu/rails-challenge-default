@@ -22,6 +22,14 @@ RSpec.describe Api::UsersController, type: :controller do
       expect(JSON.parse(response.body).keys).to eq(['users'])
     end
 
+    context 'when email param is present' do
+      it 'returns user' do
+        get :index, params: { email: users.first.email }
+
+        expect(JSON.parse(response.body)['users'].first['email']).to eq(users.first.email)
+      end
+    end
+
     context 'when query params are not valid' do
       it 'returns unprocessable entity status' do
         get :index, params: { cellphone: 'invalid' }
@@ -32,6 +40,11 @@ RSpec.describe Api::UsersController, type: :controller do
   end
 
   describe 'POST #create' do
+    before do
+      WebMock.stub_request(:post, 'https://w7nbdj3b3nsy3uycjqd7bmuplq0yejgw.lambda-url.us-east-2.on.aws/v1/account').
+        to_return(status: 200, body: { account_key: '123' }.to_json)
+    end
+
     context 'when attributes are valid' do
       let(:attributes) do
         {
@@ -60,6 +73,26 @@ RSpec.describe Api::UsersController, type: :controller do
         post :create, params: attributes
 
         expect(JSON.parse(response.body).keys).to eq(%w[email phone_number full_name key account_key metadata])
+      end
+
+      it 'creates user with a random key' do
+        post :create, params: attributes
+
+        expect(User.last.key).not_to be_nil
+      end
+
+      it 'creates user with a hashed password' do
+        post :create, params: attributes
+
+        expect(User.last.password).not_to eq(attributes[:password])
+      end
+
+      it 'creates user with an account key' do
+        Sidekiq::Testing.inline! do
+          post :create, params: attributes
+
+          expect(User.last.account_key).to eq('123')
+        end
       end
 
       context 'when attributes are invalid' do
