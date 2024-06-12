@@ -5,6 +5,7 @@ RSpec.describe ::Users::Creator do
     expect(described_class.organized).to eq([
       ::Users::AssignKey,
       ::Users::Persist,
+      ::Users::EnqueueAccountKeysCreator
     ])
   end
 end

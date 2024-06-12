@@ -6,7 +6,7 @@ RSpec.describe Users::Finder do
       Users::Finders::ValidateParams,
       Users::Finders::ByEmail,
       Users::Finders::ByFullName,
-      Users::Finders::ByMetadata
+      Users::Finders::ByMetadata,
     ])
   end
 end
